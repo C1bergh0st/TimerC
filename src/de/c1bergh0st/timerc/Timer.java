@@ -1,6 +1,14 @@
 package de.c1bergh0st.timerc;
 
-public class Timer {
+import de.c1bergh0st.timerc.gui.MainFrame;
+import de.c1bergh0st.timerc.gui.TimerPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Timer implements Comparable{
     private String name;
     private String message;
     private boolean soundsOnEnd;
@@ -8,7 +16,9 @@ public class Timer {
     private long duration;
     private long start;
     private long end;
-    private boolean valid;
+    private boolean once;
+    private Set<Observer> observers;
+    private TimerController timerController;
 
     public Timer(String name, String message, long duration, boolean looping, boolean soundsOnEnd) {
         this.name = name;
@@ -16,7 +26,8 @@ public class Timer {
         this.soundsOnEnd = soundsOnEnd;
         this.looping = looping;
         this.duration = duration;
-        this.valid = true;
+        this.once = true;
+        this.observers = new HashSet<>();
         reset();
     }
 
@@ -26,6 +37,40 @@ public class Timer {
 
     public Timer(String name, long duration){
         this(name, "", duration);
+    }
+
+    public void update(){
+        if(this.hasEnded() && once){
+            once = false;
+            if(this.shouldSound()){
+                Toolkit.getDefaultToolkit().beep();
+            }
+
+            if(this.isLooping()){
+                this.reset();
+            } else {
+                timerController.queueRemoval(this);
+            }
+            observers.forEach(Observer::noteEnd);
+            timerController.queRefresh();
+        }
+    }
+
+    public Set<Observer> getObservers(){
+        return observers;
+    }
+
+    public void register(Observer observer){
+        observers.add(observer);
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public boolean isLooping(){
@@ -52,15 +97,16 @@ public class Timer {
     public void reset(){
         this.start = System.currentTimeMillis();
         this.end = start + duration;
-        this.valid = true;
+        this.once = true;
     }
 
-    public void invalidate(){
-        valid = false;
+    @Override
+    public int compareTo(Object o) {
+        Timer other = (Timer) o;
+        return (int)(this.getEnd() - other.getEnd());
     }
 
-    public boolean isValid(){
-        return valid;
+    public void setController(TimerController timerController) {
+        this.timerController = timerController;
     }
-
 }
