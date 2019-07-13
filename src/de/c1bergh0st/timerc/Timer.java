@@ -135,6 +135,10 @@ public class Timer implements Comparable{
         return end - System.currentTimeMillis();
     }
 
+    public long getCycleDuration(){
+        return this.duration;
+    }
+
     /**
      * @return the local timestamp of when this timer will end NOTE: will return wrong results while this Timer is paused
      */
