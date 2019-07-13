@@ -82,7 +82,7 @@ public class TimerPanel extends JPanel implements Observer {
      * @return a String in the given format
      */
     @SuppressWarnings("SpellCheckingInspection")
-    private String format(long millis){
+    public static String format(long millis){
         int min = (int) (millis / (60 * 1000));
         int sec = (int) ((millis / 1000) % 60);
         int millisec = (int) (millis % 1000) / 10;

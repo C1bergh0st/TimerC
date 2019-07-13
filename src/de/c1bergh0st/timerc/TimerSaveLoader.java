@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TimerSaveLoader {
-    public static char ARGUMENTSEPARATOR = ',';
-    public static char ARGSEP = ARGUMENTSEPARATOR;
-    public static char OBJECTSEPARATOR = '#';
+    public static final char ARGUMENT_SEPARATOR = ',';
+    public static final char ARGSEP = ARGUMENT_SEPARATOR;
+    public static final char OBJECT_SEPARATOR = '#';
 
     public static void saveToFile(Collection<Timer> timers, File f) throws FileNotFoundException {
         StringBuilder sb = new StringBuilder();
         for(Timer timer : timers){
             sb.append(convertToString(timer));
-            sb.append(Character.toString(OBJECTSEPARATOR));
+            sb.append(OBJECT_SEPARATOR);
         }
-        sb.deleteCharAt(sb.lastIndexOf(Character.toString(OBJECTSEPARATOR)));
+        sb.deleteCharAt(sb.lastIndexOf(Character.toString(OBJECT_SEPARATOR)));
         PrintWriter pw = new PrintWriter(f);
         pw.print(sb.toString());
         pw.flush();
@@ -28,7 +28,7 @@ public class TimerSaveLoader {
         Scanner scanner = new Scanner(f);
         String data = scanner.nextLine();
         scanner.close();
-        String[] dataobjects = data.split(Character.toString(OBJECTSEPARATOR));
+        String[] dataobjects = data.split(Character.toString(OBJECT_SEPARATOR));
         List<Timer> list = new LinkedList<>();
         for(String timerString : dataobjects){
             try{
@@ -42,8 +42,8 @@ public class TimerSaveLoader {
     }
 
     public static String convertToString(Timer timer){
-        String name = timer.getName().replaceAll(OBJECTSEPARATOR + "|" + ARGUMENTSEPARATOR, "");
-        String message = timer.getMessage().replaceAll(OBJECTSEPARATOR + "|" + ARGUMENTSEPARATOR, "");
+        String name = timer.getName().replaceAll(OBJECT_SEPARATOR + "|" + ARGUMENT_SEPARATOR, "");
+        String message = timer.getMessage().replaceAll(OBJECT_SEPARATOR + "|" + ARGUMENT_SEPARATOR, "");
         long duration;
         if(!timer.isLooping()){
             duration = timer.getRemaining();
@@ -52,17 +52,15 @@ public class TimerSaveLoader {
         }
         boolean looping = timer.isLooping();
         boolean soundsOnEnd = timer.shouldSound();
-        StringBuilder sb = new StringBuilder();
-        sb.append(name);
-        sb.append(ARGUMENTSEPARATOR);
-        sb.append(message);
-        sb.append(ARGUMENTSEPARATOR);
-        sb.append(duration);
-        sb.append(ARGUMENTSEPARATOR);
-        sb.append(looping);
-        sb.append(ARGUMENTSEPARATOR);
-        sb.append(soundsOnEnd);
-        return sb.toString();
+        return name +
+                ARGUMENT_SEPARATOR +
+                message +
+                ARGUMENT_SEPARATOR +
+                duration +
+                ARGUMENT_SEPARATOR +
+                looping +
+                ARGUMENT_SEPARATOR +
+                soundsOnEnd;
     }
 
     public static Timer convertFromString(String s) throws IllegalArgumentException{

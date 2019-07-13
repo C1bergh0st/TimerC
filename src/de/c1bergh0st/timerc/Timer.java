@@ -1,5 +1,7 @@
 package de.c1bergh0st.timerc;
 
+import de.c1bergh0st.timerc.gui.TimerPanel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,5 +187,9 @@ public class Timer implements Comparable{
     public void start(long startTime) {
         this.paused = false;
         this.end = startTime + pauseRemaining;
+    }
+
+    public String toString(){
+        return name + "(" + TimerPanel.format(duration) + ")";
     }
 }

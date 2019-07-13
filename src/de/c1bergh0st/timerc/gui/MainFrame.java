@@ -34,6 +34,12 @@ public class MainFrame extends JFrame {
         create.addActionListener(actionEvent -> new TimerCreator(timerController));
         menu.add(create);
 
+        JMenu saveLoad = new JMenu("Save/Load");
+        bar.add(saveLoad);
+        JMenuItem save = new JMenuItem("Save");
+        save.addActionListener(actionEvent -> new TimerSaveChooser(timerController));
+        saveLoad.add(save);
+
         this.setLayout(new BorderLayout());
         super.add(bar, BorderLayout.NORTH);
         this.contentPanel = new JPanel();

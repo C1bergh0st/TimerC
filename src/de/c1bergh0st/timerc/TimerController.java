@@ -3,6 +3,7 @@ package de.c1bergh0st.timerc;
 import de.c1bergh0st.timerc.gui.MainFrame;
 import de.c1bergh0st.timerc.gui.TimerPanel;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -67,4 +68,9 @@ public class TimerController {
         this.frame = frame;
     }
 
+    public List<Timer> getAllTimers() {
+        List<Timer> list = new LinkedList<>();
+        list.addAll(timers);
+        return list;
+    }
 }
