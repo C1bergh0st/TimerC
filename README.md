@@ -11,3 +11,8 @@ TimerC is pronounced [tajmərze]
 - Create Timers with millisecond precision (even though you wont be that accurate)
 - Start/Stop Any Timer at any Time
 - Start/Stop All Timers at once
+
+
+# Versions
+- v1.0 Basic Timer Functionality
+- v1.1 Added save and load capability
