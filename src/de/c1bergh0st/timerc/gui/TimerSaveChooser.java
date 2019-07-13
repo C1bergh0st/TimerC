@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 
@@ -71,6 +72,8 @@ public class TimerSaveChooser {
             List<Timer> selectedList = jList.getSelectedValuesList();
             JFileChooser jFileChooser= new JFileChooser();
             jFileChooser.setCurrentDirectory(new File("."));
+            jFileChooser.setAcceptAllFileFilterUsed(false);
+            jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Timer files", "timer"));
             jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             if(jFileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION){
                 File f = jFileChooser.getSelectedFile();
