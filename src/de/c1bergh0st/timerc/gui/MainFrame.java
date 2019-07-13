@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
         JMenuItem load = new JMenuItem("Load");
         load.addActionListener(actionEvent -> {
             JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setCurrentDirectory(new File("."));
             jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             jFileChooser.setAcceptAllFileFilterUsed(false);
             jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Timer files", "timer"));

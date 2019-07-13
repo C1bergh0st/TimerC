@@ -70,6 +70,7 @@ public class TimerSaveChooser {
         buttonSave.addActionListener(actionEvent -> {
             List<Timer> selectedList = jList.getSelectedValuesList();
             JFileChooser jFileChooser= new JFileChooser();
+            jFileChooser.setCurrentDirectory(new File("."));
             jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             if(jFileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION){
                 File f = jFileChooser.getSelectedFile();
