@@ -1,11 +1,18 @@
 package de.c1bergh0st.timerc.gui;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.c1bergh0st.timerc.Timer;
 import de.c1bergh0st.timerc.TimerController;
+import de.c1bergh0st.timerc.TimerSaveLoader;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
@@ -15,7 +22,7 @@ public class MainFrame extends JFrame {
     private final List<TimerPanel> panels;
 
 
-    public MainFrame(TimerController timerController){
+    public MainFrame(TimerController timerController) {
         super("Timer");
         this.timerController = timerController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,30 +47,53 @@ public class MainFrame extends JFrame {
         save.addActionListener(actionEvent -> new TimerSaveChooser(timerController));
         saveLoad.add(save);
 
+        JMenuItem load = new JMenuItem("Load");
+        load.addActionListener(actionEvent -> {
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            jFileChooser.setAcceptAllFileFilterUsed(false);
+            jFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Timer files", "timer"));
+            if (jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File f = jFileChooser.getSelectedFile();
+                try {
+                    List<Timer> loadedTimers = TimerSaveLoader.readFromFile(f);
+                    for(Timer timer: loadedTimers){
+                        timerController.add(timer);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e){
+                    JOptionPane.showMessageDialog(this, "ERROR", "This File seems to be corrupt", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        saveLoad.add(load);
+
+
         this.setLayout(new BorderLayout());
         super.add(bar, BorderLayout.NORTH);
         this.contentPanel = new JPanel();
         contentPanel.setBackground(new Color(128, 142, 255));
         panels = new ArrayList<>();
         super.add(contentPanel, BorderLayout.CENTER);
-        this.setPreferredSize(new Dimension(800,500));
+        this.setPreferredSize(new Dimension(800, 500));
         this.setVisible(true);
     }
 
     /**
      * Makes sure the Timers are displayed correctly
      */
-    public void refresh(){
+    public void refresh() {
         Toolkit.getDefaultToolkit().sync();
-        for(TimerPanel panel : panels){
+        for (TimerPanel panel : panels) {
             panel.refresh();
         }
         this.revalidate();
         this.repaint();
     }
 
-    public void add(JComponent c){
-        if( c instanceof TimerPanel){
+    public void add(JComponent c) {
+        if (c instanceof TimerPanel) {
             panels.add((TimerPanel) c);
         }
         contentPanel.add(c);
@@ -73,8 +103,8 @@ public class MainFrame extends JFrame {
     }
 
     @SuppressWarnings("unused")
-    public void remove(JComponent c){
-        if(c instanceof TimerPanel){
+    public void remove(JComponent c) {
+        if (c instanceof TimerPanel) {
             panels.remove(c);
         }
         contentPanel.remove(c);

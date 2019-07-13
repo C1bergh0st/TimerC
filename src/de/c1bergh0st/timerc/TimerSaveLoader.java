@@ -35,7 +35,7 @@ public class TimerSaveLoader {
                 list.add(convertFromString(timerString));
             } catch (IllegalArgumentException e){
                 System.err.println("Error while parsing");
-                e.printStackTrace();
+                throw e;
             }
         }
         return list;

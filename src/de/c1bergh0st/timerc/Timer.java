@@ -34,7 +34,6 @@ public class Timer implements Comparable{
         this.looping = looping;
         this.duration = duration;
         this.observers = new ArrayList<>();
-        paused = false;
         reset();
     }
 

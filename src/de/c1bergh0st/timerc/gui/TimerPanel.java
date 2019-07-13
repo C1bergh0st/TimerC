@@ -104,7 +104,7 @@ public class TimerPanel extends JPanel implements Observer {
             }
         } else {
             //you cannot pause a finished Timer
-            toggle.setEnabled(false);
+            toggle.setEnabled(timer.isPaused());
         }
         //All this code for a bit of flash
         if (endBlink > System.currentTimeMillis()){
