@@ -3,26 +3,23 @@ package de.c1bergh0st.timerc;
 import de.c1bergh0st.timerc.gui.MainFrame;
 import de.c1bergh0st.timerc.gui.TimerPanel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TimerController {
-    private List<Timer> timers;
+    private final List<Timer> timers;
     private MainFrame frame;
 
+    /**
+     * Creates an empty TimerController
+     */
     public TimerController(){
         timers = new CopyOnWriteArrayList<>();
     }
 
-
-    public void alert(){
-        System.out.println("Alerted");
-        //new Sound("/res/sounds/definite.wav", 0, false);
-        //audioController.playBackground("definite.wav");
-        //audioController.playSound("definite.wav");
-    }
-
+    /**
+     * Pauses all Timers who are registered in this TimerController
+     */
     public void pauseAll(){
         long pauseTime = System.currentTimeMillis();
         for(Timer timer: timers){
@@ -30,6 +27,10 @@ public class TimerController {
         }
     }
 
+
+    /**
+     * Starts all Timers who are registered in this TimerController
+     */
     public void startAll(){
         long startTime = System.currentTimeMillis();
         for(Timer timer: timers){
@@ -37,14 +38,20 @@ public class TimerController {
         }
     }
 
-
+    /**
+     * updates all Timers who are registered in this TimerController
+     */
     public void update(){
         for(Timer timer: timers){
             timer.update();
         }
     }
 
-    public synchronized void add(Timer timer){
+    /**
+     * Adds a Timer to this TimerController and registers a new TimerPanel in the MainFrame
+     * @param timer the Timer to add
+     */
+    public void add(Timer timer){
         if(timers.contains(timer)){
             return;
         }
@@ -52,6 +59,10 @@ public class TimerController {
         frame.add(new TimerPanel(timer));
     }
 
+    /**
+     * Sets this Timers MainFrame
+     * @param frame the MainFrame to set
+     */
     public void setMainFrame(MainFrame frame){
         this.frame = frame;
     }

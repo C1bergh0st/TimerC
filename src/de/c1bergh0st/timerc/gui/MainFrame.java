@@ -1,19 +1,18 @@
 package de.c1bergh0st.timerc.gui;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import de.c1bergh0st.timerc.Timer;
+
 import de.c1bergh0st.timerc.TimerController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
 
 public class MainFrame extends JFrame {
-    private TimerController timerController;
-    private JPanel contentPanel;
-    private List<TimerPanel> panels;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private final TimerController timerController;
+    private final JPanel contentPanel;
+    private final List<TimerPanel> panels;
 
 
     public MainFrame(TimerController timerController){
@@ -25,20 +24,14 @@ public class MainFrame extends JFrame {
         JMenu menu = new JMenu("Edit");
         bar.add(menu);
         JMenuItem pause = new JMenuItem("Pause");
-        pause.addActionListener(actionEvent -> {
-            timerController.pauseAll();
-        });
+        pause.addActionListener(actionEvent -> timerController.pauseAll());
         menu.add(pause);
         JMenuItem start = new JMenuItem("Start");
-        start.addActionListener(actionEvent -> {
-            timerController.startAll();
-        });
+        start.addActionListener(actionEvent -> timerController.startAll());
         menu.add(start);
 
         JMenuItem create = new JMenuItem("Create");
-        create.addActionListener(actionEvent -> {
-            new TimerCreateor().generateTimer(timerController);
-        });
+        create.addActionListener(actionEvent -> new TimerCreator(timerController));
         menu.add(create);
 
         this.setLayout(new BorderLayout());
@@ -51,6 +44,9 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Makes sure the Timers are displayed correctly
+     */
     public void refresh(){
         Toolkit.getDefaultToolkit().sync();
         for(TimerPanel panel : panels){
@@ -70,6 +66,7 @@ public class MainFrame extends JFrame {
         this.repaint();
     }
 
+    @SuppressWarnings("unused")
     public void remove(JComponent c){
         if(c instanceof TimerPanel){
             panels.remove(c);

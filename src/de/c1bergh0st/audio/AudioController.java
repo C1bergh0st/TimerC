@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class AudioController {
 	private static final int MAX_ACTIVE_SOUNDS = 32;
 	private int activeSounds;
-	private Set<Integer> availableIds;
-	private LinkedList<Sound> sounds;
-	private LinkedList<Sound> removeables;
+	private final Set<Integer> availableIds;
+	private final LinkedList<Sound> sounds;
+	private LinkedList<Sound> removables;
 	private Sound loopingSound;
 	
 	/**
@@ -17,7 +18,7 @@ public class AudioController {
 	 */
 	public AudioController(){
 	    sounds = new LinkedList<>();
-	    removeables = new LinkedList<>();
+	    removables = new LinkedList<>();
 	    availableIds = new HashSet<>();
 	    populateIds();
 	}
@@ -25,7 +26,8 @@ public class AudioController {
 	
 	
 	private int getFirstFreeId(){
-	    if(availableIds.isEmpty()){
+		//noinspection StatementWithEmptyBody
+		if(availableIds.isEmpty()){
 	        //Error handling
 	    }
 	    for(int i = 0; i < MAX_ACTIVE_SOUNDS; i++){
@@ -77,23 +79,23 @@ public class AudioController {
 	    Sound s;
 		for (Sound sound : sounds) {
 			s = sound;
-			if (s.isFinished() && !removeables.contains(s)) {
-				removeables.add(s);
+			if (s.isFinished() && !removables.contains(s)) {
+				removables.add(s);
 			}
 		}
-		for(Sound temp : removeables){
+		for(Sound temp : removables){
 		    temp.terminate();
 			sounds.remove(temp);
 			availableIds.add(temp.getId());
 			activeSounds--;
 		}
-        removeables = new LinkedList<>();
+        removables = new LinkedList<>();
 	}
 	
 	
 	/**
 	 * Starts playing a 
-	 * @param path the path to the Sound inside the sounds folder
+	 * @param path the path to the Sound inside the sounds (./res/sounds) folder
 	 * @return the assigned id of the Sound or -1 if no new Sounds could be created
 	 */
 	public int playSound(String path){
@@ -119,7 +121,7 @@ public class AudioController {
 	        if(s.getId() == id){
 	            s.terminate();
 	        }
-	        removeables.add(s);
+	        removables.add(s);
 	    }
 	}
 }

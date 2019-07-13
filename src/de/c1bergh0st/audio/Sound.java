@@ -3,12 +3,13 @@ package de.c1bergh0st.audio;
 import javax.sound.sampled.*;
 import java.io.IOException;
 
+@SuppressWarnings({"FieldCanBeLocal", "unused", "WeakerAccess"})
 public class Sound {
 	private Clip clip;
 	private AudioInputStream ais;
-	private int id;
+	private final int id;
 	@SuppressWarnings("unused")
-    private String path;
+    private final String path;
 	private boolean terminated;
 	
 	/**
