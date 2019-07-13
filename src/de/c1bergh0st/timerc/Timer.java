@@ -1,12 +1,7 @@
 package de.c1bergh0st.timerc;
 
-import de.c1bergh0st.timerc.gui.MainFrame;
-import de.c1bergh0st.timerc.gui.TimerPanel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Timer implements Comparable{
     private String name;
@@ -16,9 +11,11 @@ public class Timer implements Comparable{
     private long duration;
     private long start;
     private long end;
-    private boolean once;
-    private Set<Observer> observers;
-    private TimerController timerController;
+    private List<Observer> observers;
+    private boolean notifiedObservers;
+    private boolean paused;
+    private long pauseRemaining;
+
 
     public Timer(String name, String message, long duration, boolean looping, boolean soundsOnEnd) {
         this.name = name;
@@ -26,8 +23,8 @@ public class Timer implements Comparable{
         this.soundsOnEnd = soundsOnEnd;
         this.looping = looping;
         this.duration = duration;
-        this.once = true;
-        this.observers = new HashSet<>();
+        this.observers = new ArrayList<>();
+        paused = false;
         reset();
     }
 
@@ -39,31 +36,24 @@ public class Timer implements Comparable{
         this(name, "", duration);
     }
 
-    public void update(){
-        if(this.hasEnded() && once){
-            once = false;
-            if(this.shouldSound()){
-                Toolkit.getDefaultToolkit().beep();
-            }
 
-            if(this.isLooping()){
-                this.reset();
-            } else {
-                timerController.queueRemoval(this);
+    public void update() {
+        if(this.hasEnded() && !notifiedObservers && !paused){
+            notifiedObservers = true;
+            notifyObservers();
+            if(looping){
+                reset();
             }
-            observers.forEach(Observer::noteEnd);
-            timerController.queRefresh();
         }
-    }
-
-    public Set<Observer> getObservers(){
-        return observers;
     }
 
     public void register(Observer observer){
         observers.add(observer);
     }
 
+    private void notifyObservers(){
+        observers.forEach(Observer::alert);
+    }
 
     public String getName() {
         return name;
@@ -77,6 +67,10 @@ public class Timer implements Comparable{
         return looping;
     }
 
+    public boolean isPaused(){
+        return paused;
+    }
+
     public boolean shouldSound(){
         return soundsOnEnd;
     }
@@ -86,6 +80,7 @@ public class Timer implements Comparable{
     }
 
     public long getRemaining(){
+        if(this.paused) return pauseRemaining;
         if(this.hasEnded()) return  0;
         return end - System.currentTimeMillis();
     }
@@ -97,7 +92,7 @@ public class Timer implements Comparable{
     public void reset(){
         this.start = System.currentTimeMillis();
         this.end = start + duration;
-        this.once = true;
+        notifiedObservers = false;
     }
 
     @Override
@@ -106,7 +101,14 @@ public class Timer implements Comparable{
         return (int)(this.getEnd() - other.getEnd());
     }
 
-    public void setController(TimerController timerController) {
-        this.timerController = timerController;
+    public void pause(long pauseTime) {
+        this.paused = true;
+        this.pauseRemaining = end - pauseTime;
+        if(this.hasEnded()) this.pauseRemaining = 0;
+    }
+
+    public void start(long startTime) {
+        this.paused = false;
+        this.end = startTime + pauseRemaining;
     }
 }

@@ -18,15 +18,46 @@ public class MainFrame extends JFrame {
 
     public MainFrame(TimerController timerController){
         super("Timer");
+        this.timerController = timerController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
+        JMenuBar bar = new JMenuBar();
+        JMenu menu = new JMenu("Edit");
+        bar.add(menu);
+        JMenuItem pause = new JMenuItem("Pause");
+        pause.addActionListener(actionEvent -> {
+            timerController.pauseAll();
+        });
+        menu.add(pause);
+        JMenuItem start = new JMenuItem("Start");
+        start.addActionListener(actionEvent -> {
+            timerController.startAll();
+        });
+        menu.add(start);
+
+        JMenuItem create = new JMenuItem("Create");
+        create.addActionListener(actionEvent -> {
+            new TimerCreateor().generateTimer(timerController);
+        });
+        menu.add(create);
+
+        this.setLayout(new BorderLayout());
+        super.add(bar, BorderLayout.NORTH);
         this.contentPanel = new JPanel();
         contentPanel.setBackground(new Color(128, 142, 255));
         panels = new ArrayList<>();
-        super.add(contentPanel);
-        this.timerController = timerController;
+        super.add(contentPanel, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(800,500));
         this.setVisible(true);
+    }
+
+    public void refresh(){
+        Toolkit.getDefaultToolkit().sync();
+        for(TimerPanel panel : panels){
+            panel.refresh();
+        }
+        this.revalidate();
+        this.repaint();
     }
 
     public void add(JComponent c){
@@ -35,31 +66,6 @@ public class MainFrame extends JFrame {
         }
         contentPanel.add(c);
         contentPanel.revalidate();
-        this.revalidate();
-        this.repaint();
-    }
-
-
-    public void removeAll(Collection<JComponent> components){
-        for(JComponent component: components){
-            remove(component);
-        }
-    }
-
-    public void forceRefresh(){
-        panels.sort(new Comparator<TimerPanel>() {
-            @Override
-            public int compare(TimerPanel timerPanel, TimerPanel t1) {
-                return (int) (timerPanel.getTimer().getEnd() - t1.getTimer().getEnd());
-            }
-        });
-        for(TimerPanel p : panels){
-            contentPanel.remove(p);
-        }
-
-        for(TimerPanel p : panels){
-            contentPanel.add(p);
-        }
         this.revalidate();
         this.repaint();
     }
