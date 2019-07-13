@@ -8,6 +8,6 @@ TimerC is pronounced [tajmərze]
 ![alt text](https://raw.githubusercontent.com/C1bergh0st/TimerC/master/img.png "Preview")
 
 # Functionality
-- Create Timers with millisecond precision (even though you wont be that acurate)
+- Create Timers with millisecond precision (even though you wont be that accurate)
 - Start/Stop Any Timer at any Time
 - Start/Stop All Timers at once
