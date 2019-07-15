@@ -71,7 +71,9 @@ public class TimerController {
         }
         timers.add(timer);
         frame.add(new TimerPanel(timer, frame));
-        new SoundObserver(timer);
+        if(timer.shouldSound()){
+            new SoundObserver(timer);
+        }
     }
 
     /**
@@ -86,5 +88,11 @@ public class TimerController {
         List<Timer> list = new LinkedList<>();
         list.addAll(timers);
         return list;
+    }
+
+    public void removeAll() {
+        for(Timer timer: timers){
+            timer.terminate();
+        }
     }
 }

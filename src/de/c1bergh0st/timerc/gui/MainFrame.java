@@ -41,6 +41,11 @@ public class MainFrame extends JFrame {
         create.addActionListener(actionEvent -> new TimerCreator(timerController));
         menu.add(create);
 
+
+        JMenuItem removeAll = new JMenuItem("Remove All");
+        removeAll.addActionListener(actionEvent -> timerController.removeAll());
+        menu.add(removeAll);
+
         JMenu saveLoad = new JMenu("Save/Load");
         bar.add(saveLoad);
         JMenuItem save = new JMenuItem("Save");

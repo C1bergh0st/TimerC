@@ -24,7 +24,9 @@ public class Sound {
         terminated = false;
 		try {
             clip = AudioSystem.getClip();
+            long now = System.currentTimeMillis();
             ais = AudioSystem.getAudioInputStream(Sound.class.getResourceAsStream(path));
+            System.out.println("Loading " + path + " took " + (System.currentTimeMillis() - now) + " ms");
             clip.open(ais);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException  e) {
             //TODO Exception-Handling

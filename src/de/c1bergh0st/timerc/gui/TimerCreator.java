@@ -18,6 +18,7 @@ public class TimerCreator {
     private JTextField seconds;
     private JTextField milliseconds;
     private JCheckBox startEnabled;
+    private JCheckBox sound;
     private JButton submit;
 
     /**
@@ -105,6 +106,9 @@ public class TimerCreator {
         b.add(new JLabel("Sofort Starten:"));
         startEnabled = new JCheckBox();
         b.add(startEnabled);
+        b.add(new JLabel("Sound:"));
+        sound = new JCheckBox();
+        b.add(sound);
         frame.add(b);
 
         submit.addActionListener(e -> create());
@@ -122,15 +126,16 @@ public class TimerCreator {
         long duration = min + sec + mil;
         boolean loop = looping.isSelected();
         boolean startNow = startEnabled.isSelected();
+        boolean soundsOnEnd = sound.isSelected();
         String nameStr = name.getText();
-        Timer t = new Timer(nameStr, "", duration, loop, true);
+        Timer t = new Timer(nameStr, "", duration, loop, soundsOnEnd);
         if(!startNow){
             t.pause(System.currentTimeMillis());
         }
         controller.add(t);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.dispose();
-        System.out.println("Disposed");
+        System.out.println("Created Timer " + t);
     }
 
     @SuppressWarnings({"UnusedAssignment", "unused"})

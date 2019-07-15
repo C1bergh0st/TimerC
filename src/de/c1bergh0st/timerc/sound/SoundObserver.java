@@ -13,6 +13,7 @@ public class SoundObserver implements Observer {
 
     @Override
     public void alert() {
+        if(sound != null) sound.terminate();
         sound = new Sound("/res/sounds/definite.wav", 1 ,false);
     }
 
