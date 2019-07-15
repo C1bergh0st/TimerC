@@ -7,4 +7,6 @@ public interface Observer {
 
     void alert();
 
+    void terminate();
+
 }

@@ -104,7 +104,7 @@ public class MainFrame extends JFrame {
     }
 
     @SuppressWarnings("unused")
-    public void remove(JComponent c) {
+    public void remove(Component c) {
         if (c instanceof TimerPanel) {
             panels.remove(c);
         }

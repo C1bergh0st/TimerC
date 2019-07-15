@@ -18,6 +18,7 @@ public class Timer implements Comparable{
     private boolean notifiedObservers;
     private boolean paused;
     private long pauseRemaining;
+    private boolean terminated;
 
     /**
      * Creates a new Timer
@@ -154,7 +155,20 @@ public class Timer implements Comparable{
         this.start = System.currentTimeMillis();
         this.end = start + duration;
         this.paused = false;
+        this.terminated = false;
         notifiedObservers = false;
+    }
+
+    public void terminate(){
+        this.terminated = true;
+    }
+
+    public boolean isTerminated(){
+        return terminated;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
     }
 
     /**
@@ -191,4 +205,5 @@ public class Timer implements Comparable{
     public String toString(){
         return name + "(" + TimerPanel.format(duration) + ")";
     }
+
 }

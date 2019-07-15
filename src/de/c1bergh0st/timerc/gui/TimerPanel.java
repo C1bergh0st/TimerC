@@ -12,24 +12,28 @@ public class TimerPanel extends JPanel implements Observer {
     private static final int BLINK_CYCLE_DUR = 250;
     private static final int BLINK_DUR = 6 * 1000;
     private static final Color LOOPING_COLOR_BACKGROUND = new Color(168, 240, 223);
-    private static final Color alertColor = new Color(255, 92, 92);
+    private static final Color ALERT_COLOR = new Color(255, 92, 92);
+    private static final Dimension BUTTONDIMENSION = new Dimension(100, 20);
 
     private final Timer timer;
     private final JLabel remainingTime;
     private final JButton toggle;
+    private final JButton remove;
     private final Color normal;
     private long endBlink;
     private long lastBlink;
     private boolean red;
+    private Container parent;
 
     /**
      * Creates a new TimerPanel from the given Timer
      * @param timer A JPanel which can be used in a swing application
      */
-    public TimerPanel(Timer timer){
+    public TimerPanel(Timer timer, Container parent){
         super();
         //JPanel and initialisation
         this.timer = timer;
+        this.parent = parent;
         this.setBorder(new LineBorder(Color.BLACK));
         timer.register(this);
         this.setLayout(new BorderLayout());
@@ -44,7 +48,7 @@ public class TimerPanel extends JPanel implements Observer {
 
         //Toggle Pause/Start Button
         toggle = new JButton("");
-        toggle.setPreferredSize(new Dimension(80,20));
+        toggle.setPreferredSize(BUTTONDIMENSION);
         toggle.addActionListener(e ->{
             if(timer.isPaused()){
                 timer.start(System.currentTimeMillis());
@@ -56,16 +60,28 @@ public class TimerPanel extends JPanel implements Observer {
         b2.setBorder(new EmptyBorder(5,20,5,20));
         b2.add(toggle);
 
+        remove = new JButton("Remove");
+        remove.setPreferredSize(BUTTONDIMENSION);
+        remove.setSize(BUTTONDIMENSION);
+        remove.addActionListener(actionEvent -> {
+            timer.pause(System.currentTimeMillis());
+            timer.terminate();
+        });
+        Box b4 = Box.createHorizontalBox();
+        b4.setBorder(new EmptyBorder(0,20,10,20));
+        b4.add(remove);
+
         //Timer Name
         JLabel name = new JLabel(timer.getName());
         name.setFont(name.getFont().deriveFont(15f));
         Box b3 = Box.createHorizontalBox();
-        b3.setBorder(new EmptyBorder(20,20,10,20));
+        b3.setBorder(new EmptyBorder(10,20,10,20));
         b3.add(name);
 
         //Alignment
         Box left = Box.createVerticalBox();
         left.add(b3);
+        left.add(b4);
         left.add(b2);
         this.add(left, BorderLayout.WEST);
 
@@ -111,7 +127,7 @@ public class TimerPanel extends JPanel implements Observer {
             if(lastBlink + BLINK_CYCLE_DUR < System.currentTimeMillis()){
                 red = !red;
                 if(red){
-                    setBackground(alertColor);
+                    setBackground(ALERT_COLOR);
                 } else {
                     setBackground(normal);
                 }
@@ -133,5 +149,10 @@ public class TimerPanel extends JPanel implements Observer {
         if(timer.isLooping()){
             red = true;
         }
+    }
+
+    @Override
+    public void terminate() {
+        parent.remove(this);
     }
 }

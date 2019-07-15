@@ -2,7 +2,9 @@ package de.c1bergh0st.timerc;
 
 import de.c1bergh0st.timerc.gui.MainFrame;
 import de.c1bergh0st.timerc.gui.TimerPanel;
+import de.c1bergh0st.timerc.sound.SoundObserver;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -46,6 +48,17 @@ public class TimerController {
         for(Timer timer: timers){
             timer.update();
         }
+        List<Timer> destructionQueue = new LinkedList<>();
+        //Check for Timer termination and remove all terminated Timers and their Observers
+        for(Timer timer: timers){
+            if (timer.isTerminated()){
+                destructionQueue.add(timer);
+                for (Observer observer: timer.getObservers()){
+                    observer.terminate();
+                }
+            }
+        }
+        timers.removeAll(destructionQueue);
     }
 
     /**
@@ -57,7 +70,8 @@ public class TimerController {
             return;
         }
         timers.add(timer);
-        frame.add(new TimerPanel(timer));
+        frame.add(new TimerPanel(timer, frame));
+        new SoundObserver(timer);
     }
 
     /**

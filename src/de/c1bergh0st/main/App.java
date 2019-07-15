@@ -21,13 +21,13 @@ public class App {
         mainFrame = new MainFrame(timerController);
         timerController.setMainFrame(mainFrame);
         mainFrame.revalidate();
-        /*timerController.add(new Timer("Name wowo", 10231123));
+        timerController.add(new Timer("Name wowo", 10231123));
         timerController.add(new Timer("Second", 1111111));
         timerController.add(new Timer("Name 2", 222222));
         timerController.add(new Timer("Fourth", 10231123));
         timerController.add(new Timer("Name wowo", 6666));
         timerController.add(new Timer("SIXS", 12313));
-        timerController.add(new Timer("Mista is an idiot", 44444));*/
+        timerController.add(new Timer("Mista is an idiot", 44444));
         javax.swing.Timer t = new javax.swing.Timer(1000 / 30, actionEvent -> {
             last = System.currentTimeMillis();
             timerController.update();
