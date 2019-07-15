@@ -3,7 +3,7 @@ A small Timer utility written in Java with a Swing GUI
 
 TimerC is pronounced [tajmərze]
 
-[Download](https://github.com/C1bergh0st/TimerC/blob/master/Build/v1.1/TimerC.jar)
+[Download](https://github.com/C1bergh0st/TimerC/blob/master/Build/v1.2/TimerC.jar)
 
 ![alt text](https://raw.githubusercontent.com/C1bergh0st/TimerC/master/img.png "Preview")
 
@@ -16,3 +16,4 @@ TimerC is pronounced [tajmərze]
 # Versions
 - v1.0 Basic Timer Functionality
 - v1.1 Added save and load capability
+- v1.2 You can now remove Timers, Added Support for Alarm sounds
