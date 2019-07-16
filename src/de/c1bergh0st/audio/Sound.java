@@ -1,6 +1,7 @@
 package de.c1bergh0st.audio;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused", "WeakerAccess"})
@@ -25,12 +26,14 @@ public class Sound {
 		try {
             clip = AudioSystem.getClip();
             long now = System.currentTimeMillis();
-            ais = AudioSystem.getAudioInputStream(Sound.class.getResourceAsStream(path));
+            System.out.println("attempting to load from " + path);
+            BufferedInputStream buffer = new BufferedInputStream(Sound.class.getResourceAsStream(path));
+            ais = AudioSystem.getAudioInputStream(buffer);
             System.out.println("Loading " + path + " took " + (System.currentTimeMillis() - now) + " ms");
             clip.open(ais);
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException  e) {
             //TODO Exception-Handling
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e.getMessage(), e);
         }
 		if(looping){
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
