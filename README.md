@@ -14,6 +14,6 @@ TimerC is pronounced [tajmərze]
 
 
 # Versions
-- v1.0 Basic Timer Functionality
-- v1.1 Added save and load capability
 - v1.2 You can now remove Timers, Added Support for Alarm sounds
+- v1.1 Added save and load capability
+- v1.0 Basic Timer Functionality
